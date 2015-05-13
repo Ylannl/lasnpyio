@@ -28,20 +28,20 @@ def write_pcd(dir, datadict, keys=[], binary=True):
 
 	for key,val in datadict.items():
 		if key in keys or len(keys)==0:
-			fname = os.path.join(dir,key)
-			pcl.save( fname, pcl.PointCloud(val), binary=binary )
+			fname = os.path.join(dir,key+'.pcd')
+			pcl.save( pcl.PointCloud(val), fname, format='pcd', binary=binary )
 
 def read_pcd(dir, keys=[]):
 	assert os.path.exists(dir)
 
 	if len(keys)==0:
-		keys = inspect_npy(dir)
+		keys = inspect_pcd(dir)
 
 	datadict = {}	
 	for key in keys:
 		fname = os.path.join(dir,key+'.pcd')
 		if os.path.exists(fname):
-			datadict[key] = pcl.load(fname).as_array()
+			datadict[key] = pcl.load(fname).to_array()
 	return datadict
 
 def inspect_pcd(dir):
