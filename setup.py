@@ -16,7 +16,6 @@
 # Copyright 2015 Ravi Peters
 
 from setuptools import setup, find_packages
-import numpy as np
 
 setup(
     name = "lasnpyio",
