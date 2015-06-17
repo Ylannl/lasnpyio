@@ -24,7 +24,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='convert LAS to numpy binary file')
-    parser.add_argument('infile', help='input .las, _npy')
+    parser.add_argument('infile', help='input .las')
     parser.add_argument('outfile', help='npy output directory')
     parser.add_argument('-d', '--dont-move_to_origin', help='Don\'t move points to origin', dest='move_to_origin', action='store_false')
 

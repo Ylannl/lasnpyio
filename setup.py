@@ -22,5 +22,5 @@ setup(
     version = "0.1",
     packages = find_packages(),
     install_requires = ["numpy>=1.9.1", "laspy"],
-    scripts = ['util/las2npy.py', 'util/npy2pcd.py']
+    scripts = ['util/las2npy.py', 'util/npy2pcd.py', 'util/ply2npy.py']
 )
