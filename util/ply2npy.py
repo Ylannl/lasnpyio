@@ -19,14 +19,15 @@ import sys, argparse
 from pointio import io_npy, io_ply
 
 def main(args):
-	datadict = io_ply.read_ply(args.infile, move_to_origin=args.move_to_origin)
-	io_npy.write_npy(args.outfile, datadict, ['coords', 'offset'])
+	datadict = io_ply.read_ply(args.infile, move_to_origin=args.move_to_origin, read_normals=args.read_normals)
+	io_npy.write_npy(args.outfile, datadict)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='convert vertices in .ply file to numpy binary file')
     parser.add_argument('infile', help='input .ply')
     parser.add_argument('outfile', help='npy output directory')
     parser.add_argument('-d', '--dont-move_to_origin', help='Don\'t move points to origin', dest='move_to_origin', action='store_false')
+    parser.add_argument('-n', '--read_normals', help='Read normals from .ply file', dest='read_normals', action='store_true')
 
     args = parser.parse_args()
     main(args)
