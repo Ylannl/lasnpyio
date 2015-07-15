@@ -77,3 +77,38 @@ def read_ply(infile, move_to_origin=False, limit_points=0, read_normals=True):
 	datadict['coords'] = np.array(datadict['coords'], dtype=np.float32)
 	datadict['normals'] = np.array(datadict['normals'], dtype=np.float32)
 	return datadict
+
+def write_ply(fname, datadict):
+	with open(fname, 'w') as f:
+		n = datadict['coords'].shape[0]
+		if datadict.has_key('normals'):
+			f.write("""ply
+format ascii 1.0
+comment pointio generated
+element vertex {}
+property float x
+property float y
+property float z
+property float nx
+property float ny
+property float nz
+end_header\n""".format(n))
+		else:
+			f.write("""ply
+format ascii 1.0
+comment pointio generated
+element vertex {}
+property float x
+property float y
+property float z
+end_header\n""".format(n))
+			
+		if datadict.has_key('normals'):
+			for p, n in zip(datadict['coords'], datadict['normals']):
+				f.write("{p[0]} {p[1]} {p[2]} {n[0]} {n[1]} {n[2]}\n".format(p=p, n=n))
+		else:
+			for p in datadict['coords']:
+				f.write("{p[0]} {p[1]} {p[2]}\n".format(p=p))
+
+
+
