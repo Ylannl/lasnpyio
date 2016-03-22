@@ -44,6 +44,7 @@ def write_las(outfile, datadict, mask=None):
 	else:
 		coords = (datadict['coords'][mask]*scale).astype(np.int) + (datadict['offset']*scale).astype(np.int)
 	header = laspy.header.Header()
+	header.software_id = 'pointio from 3D geoinfo TUDelft\x00'
 	header.x_scale=1/scale
 	header.y_scale=1/scale
 	header.z_scale=1/scale
