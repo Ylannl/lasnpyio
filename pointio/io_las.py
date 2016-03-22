@@ -37,13 +37,16 @@ def read_las(infile, move_to_origin=True):
 	
 	return datadict
 
-def write_las(outfile, datadict):
-	scale = 100
-	coords = (datadict['coords']*scale).astype(np.int) + (datadict['offset']*100).astype(np.int)
+def write_las(outfile, datadict, mask=None):
+	scale = 100.0
+	if mask is None:
+		coords = (datadict['coords']*scale).astype(np.int) + (datadict['offset']*scale).astype(np.int)
+	else:
+		coords = (datadict['coords'][mask]*scale).astype(np.int) + (datadict['offset']*scale).astype(np.int)
 	header = laspy.header.Header()
-	header.x_scale=scale
-	header.y_scale=scale
-	header.z_scale=scale
+	header.x_scale=1/scale
+	header.y_scale=1/scale
+	header.z_scale=1/scale
 	outfile = laspy.file.File(outfile, mode="w", header=header)
 	outfile.X = coords[:,0]
 	outfile.Y = coords[:,1]
