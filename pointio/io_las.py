@@ -17,13 +17,13 @@
 
 import numpy as np
 try:
-	from laspy.file import File
+	import laspy
 except ImportError:
 	print "Cannot read las files without laspy module"
 	raise
 
 def read_las(infile, move_to_origin=True):
-	inFile = File(infile)
+	inFile = laspy.file.File(infile)
 
 	datadict = {}
 	datadict['offset'] = np.zeros(3, dtype=np.double)
@@ -37,3 +37,16 @@ def read_las(infile, move_to_origin=True):
 	
 	return datadict
 
+def write_las(outfile, datadict):
+	scale = 100
+	coords = (datadict['coords']*scale).astype(np.int) + (datadict['offset']*100).astype(np.int)
+	header = laspy.header.Header()
+	header.x_scale=scale
+	header.y_scale=scale
+	header.z_scale=scale
+	outfile = laspy.file.File(outfile, mode="w", header=header)
+	outfile.X = coords[:,0]
+	outfile.Y = coords[:,1]
+	outfile.Z = coords[:,2]
+	outfile.close()
+	
