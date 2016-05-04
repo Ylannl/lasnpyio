@@ -29,7 +29,7 @@ def write_pcd(dir, datadict, keys=[]):
 	    os.makedirs(dir)
 
 	for key,val in datadict.items():
-		if key in ['coords', 'normals', 'ma_coords_in', 'ma_coords_out']:
+		if key in ['coords', 'ma_coords_in', 'ma_coords_out']:
 			if key in keys or len(keys)==0:
 				fname = os.path.join(dir,key+'.pcd')
 				pc = pypcd.make_xyz_point_cloud(datadict[key])
@@ -44,10 +44,12 @@ def read_pcd(dir, keys=[]):
 	datadict = {}	
 	for key in keys:
 		fname = os.path.join(dir,key+'.pcd')
-		if os.path.exists(fname) and key in ['coords', 'normals', 'ma_coords_in', 'ma_coords_out']:
-			# import ipdb; ipdb.set_trace()
+		if os.path.exists(fname) and key in ['coords', 'ma_coords_in', 'ma_coords_out']:
 			pc = pypcd.PointCloud.from_path(fname)
-			datadict[key] = np.transpose(np.vstack((pc.pc_data['x'], pc.pc_data['y'], pc.pc_data['z'])))
+			datadict[key] = np.empty((pc.points,3),dtype=np.float32)
+			datadict[key][:,0] = pc.pc_data['x']
+			datadict[key][:,1] = pc.pc_data['y']
+			datadict[key][:,2] = pc.pc_data['z']
 	return datadict
 
 def inspect_pcd(dir):
