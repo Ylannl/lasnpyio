@@ -16,20 +16,24 @@
 # Copyright 2015 Ravi Peters
 
 import os
+import numpy as np
 try:
-	import pcl
+	import pypcd
 except ImportError:
-	print "Cannot read pcd files without pcl module"
+	print "Cannot read pcd files without pypcd module"
 	raise
 
-def write_pcd(dir, datadict, keys=[], binary=True):
+def write_pcd(dir, datadict, keys=[]):
+	# limited to 2d float arrays now
 	if not os.path.exists(dir):
 	    os.makedirs(dir)
 
 	for key,val in datadict.items():
-		if key in keys or len(keys)==0:
-			fname = os.path.join(dir,key+'.pcd')
-			pcl.save( pcl.PointCloud(val), fname, format='pcd', binary=binary )
+		if key in ['coords', 'normals', 'ma_coords_in', 'ma_coords_out']:
+			if key in keys or len(keys)==0:
+				fname = os.path.join(dir,key+'.pcd')
+				pc = pypcd.make_xyz_point_cloud(datadict[key])
+				pc.save_pcd(fname)
 
 def read_pcd(dir, keys=[]):
 	assert os.path.exists(dir)
@@ -40,8 +44,10 @@ def read_pcd(dir, keys=[]):
 	datadict = {}	
 	for key in keys:
 		fname = os.path.join(dir,key+'.pcd')
-		if os.path.exists(fname):
-			datadict[key] = pcl.load(fname).to_array()
+		if os.path.exists(fname) and key in ['coords', 'normals', 'ma_coords_in', 'ma_coords_out']:
+			# import ipdb; ipdb.set_trace()
+			pc = pypcd.PointCloud.from_path(fname)
+			datadict[key] = np.transpose(np.vstack((pc.pc_data['x'], pc.pc_data['y'], pc.pc_data['z'])))
 	return datadict
 
 def inspect_pcd(dir):
