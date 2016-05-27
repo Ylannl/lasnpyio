@@ -20,7 +20,7 @@ import numpy as np
 try:
 	import pypcd
 except ImportError:
-	print "Cannot read pcd files without pypcd module"
+	print("Cannot read pcd files without pypcd module")
 	raise
 
 def write_pcd(dir, datadict, keys=[]):
@@ -28,7 +28,7 @@ def write_pcd(dir, datadict, keys=[]):
 	if not os.path.exists(dir):
 	    os.makedirs(dir)
 
-	for key,val in datadict.items():
+	for key,val in list(datadict.items()):
 		if key in ['coords', 'ma_coords_in', 'ma_coords_out']:
 			if key in keys or len(keys)==0:
 				fname = os.path.join(dir,key+'.pcd')

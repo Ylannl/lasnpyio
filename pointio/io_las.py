@@ -19,7 +19,7 @@ import numpy as np
 try:
 	import laspy
 except ImportError:
-	print "Cannot read las files without laspy module"
+	print("Cannot read las files without laspy module")
 	raise
 
 def read_las(infile, move_to_origin=True):

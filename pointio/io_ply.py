@@ -48,7 +48,7 @@ def read_ply(infile, move_to_origin=False, limit_points=0, read_normals=True):
 		datadict['normals'] = []
 		if limit_points:
 			vertexcount = limit_points
-		for i in xrange(int(vertexcount)):
+		for i in range(int(vertexcount)):
 			line = f.readline()
 
 			
@@ -69,7 +69,7 @@ def read_ply(infile, move_to_origin=False, limit_points=0, read_normals=True):
 
 		if facecount is not None:
 			datadict['faces'] = []
-			for i in xrange(int(facecount)):
+			for i in range(int(facecount)):
 				line = f.readline().split()
 				vertex_ids = [int(x) for x in line[1:]]
 				datadict['faces'].append(vertex_ids)
@@ -81,7 +81,7 @@ def read_ply(infile, move_to_origin=False, limit_points=0, read_normals=True):
 def write_ply(fname, datadict):
 	with open(fname, 'w') as f:
 		n = datadict['coords'].shape[0]
-		if datadict.has_key('normals'):
+		if 'normals' in datadict:
 			f.write("""ply
 format ascii 1.0
 comment pointio generated
@@ -103,7 +103,7 @@ property float y
 property float z
 end_header\n""".format(n))
 			
-		if datadict.has_key('normals'):
+		if 'normals' in datadict:
 			for p, n in zip(datadict['coords'], datadict['normals']):
 				f.write("{p[0]} {p[1]} {p[2]} {n[0]} {n[1]} {n[2]}\n".format(p=p, n=n))
 		else:

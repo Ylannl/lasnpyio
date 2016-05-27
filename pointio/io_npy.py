@@ -22,7 +22,7 @@ def write_npy(dir, datadict, keys=[]):
 	if not os.path.exists(dir):
 	    os.makedirs(dir)
 
-	for key,val in datadict.items():
+	for key,val in list(datadict.items()):
 		if key in keys or len(keys)==0:
 			fname = os.path.join(dir,key)
 			np.save(fname, val)
