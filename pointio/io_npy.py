@@ -17,13 +17,17 @@
 
 import os
 import numpy as np
+import igraph
 
 def write_npy(dir, datadict, keys=[]):
 	if not os.path.exists(dir):
 	    os.makedirs(dir)
 
 	for key,val in list(datadict.items()):
-		if key in keys or len(keys)==0:
+		if key == 'ma_segment_graph':
+			if type(datadict[key]) is igraph.Graph:
+				datadict[key].write_pickle(os.path.join(dir, key+'.pickle'))
+		elif key in keys or len(keys)==0:
 			fname = os.path.join(dir,key)
 			np.save(fname, val)
 
@@ -38,6 +42,11 @@ def read_npy(dir, keys=[]):
 		fname = os.path.join(dir,key+'.npy')
 		if os.path.exists(fname):
 			datadict[key] = np.load(fname)
+
+	fname = os.path.join(dir,'ma_segment_graph.pickle')
+	if os.path.exists(fname):
+		datadict['ma_segment_graph'] = igraph.read(fname)
+
 	return datadict
 
 def inspect_npy(dir):
