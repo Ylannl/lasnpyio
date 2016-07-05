@@ -21,7 +21,7 @@ setup(
     name = "pointio",
     version = "0.1",
     packages = find_packages(),
-    install_requires = ["numpy>=1.9.1"],
+    install_requires = ["numpy>=1.9.1", "python-igraph"],
     extras_require = {'las':["laspy"], 'pcd':["pypcd"]},
     scripts = ['util/las2npy.py', 'util/npy2las.py', 'util/npy2pcd.py', 'util/pcd2npy.py', 'util/ply2npy.py']
 )
